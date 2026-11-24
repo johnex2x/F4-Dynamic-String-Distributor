@@ -110,7 +110,7 @@ target_precompile_headers("${PROJECT_NAME}" PRIVATE include/PCH.h)
 target_compile_options("${PROJECT_NAME}" PRIVATE ${DSD_MSVC_OPTIONS})
 target_compile_definitions("${PROJECT_NAME}" PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
 target_link_options("${PROJECT_NAME}" PRIVATE
-	"$<$<CONFIG:Release>:/DEBUG:FULL;/OPT:REF;/OPT:ICF;/INCREMENTAL:NO;/PDBALTPATH:%_PDB%>"
+	"$<$<CONFIG:Release>:/DEBUG:FULL;/OPT:REF;/OPT:ICF;/INCREMENTAL:NO;/PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>>"
 )
 
 target_link_libraries("${PROJECT_NAME}" PRIVATE
