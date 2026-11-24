@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "f4-dynamic-string-distributor",
+  "version-string": "0.1.0",
+  "description": "F4SE plugin for dynamically replacing text in Fallout 4. Port of SSE Dynamic String Distributor.",
+  "license": "GPL-3.0-or-later",
+  "dependencies": [
+    "rsm-mmio",
+    "spdlog",
+    "xbyak",
+    "rapidcsv",
+    "glaze",
+    "simpleini",
+    "boost-unordered",
+    "catch2",
+    "zlib"
+  ],
+  "builtin-baseline": "c9988016ab17527ed41e4abfa63130bc5bde04c3"
+}

@@ -1,0 +1,62 @@
+diff --git a/CommonLibF4/include/REL/IDDB.h b/CommonLibF4/include/REL/IDDB.h
+index f16c2c74..8bf79e00 100644
+--- a/CommonLibF4/include/REL/IDDB.h
++++ b/CommonLibF4/include/REL/IDDB.h
+@@ -30,6 +30,12 @@ namespace REL
+ 
+ 		[[nodiscard]] std::size_t id2offset(std::uint64_t a_id) const;
+ 
++		// DSD patch: on 1.10.98x / 1.11.x a missing ID aborts the game ("strict"), but only once the plugin has called
++		// SetStrictLookup(true). Before that (while the DLL loads) the fork's own namespace-scope
++		// "inline REL::Relocation x{ REL::ID(n) }" globals look up their IDs, none of which DSD uses; a missing one
++		// resolves to offset 0 there instead of aborting the load.
++		static void SetStrictLookup(bool a_strict) noexcept { _strictLookup = a_strict; }
++
+ #ifdef ENABLE_FALLOUT_VR
+ 		bool IsVRAddressLibraryAtLeastVersion(const char* a_minimalVRAddressLibVersion, bool a_reportAndFail = false) const;
+ #endif
+@@ -46,6 +52,8 @@ namespace REL
+ 		IDDB();
+ 		~IDDB() = default;
+ 
++		static inline bool _strictLookup{ false };
++
+ 		mmio::mapped_file_source   _mmap;
+ 		std::span<const mapping_t> _id2offset;
+ #ifdef ENABLE_FALLOUT_VR
+diff --git a/CommonLibF4/src/REL/IDDB.cpp b/CommonLibF4/src/REL/IDDB.cpp
+index e96e9808..8eae6cca 100644
+--- a/CommonLibF4/src/REL/IDDB.cpp
++++ b/CommonLibF4/src/REL/IDDB.cpp
+@@ -131,12 +131,18 @@ namespace REL
+ 		bool failed = false;
+ 		if (it == _id2offset.end()) {
+ 			failed = true;
++		} else if (Module::IsNG() && it->id != a_id) {
++			// DSD patch: on 1.10.98x / 1.11.x a missing ID must not silently resolve to the next ID's offset
++			failed = true;
+ 		} else if FALLOUT_REL_VR_CONSTEXPR (Module::IsVR()) {
+ 			if (it->id != a_id) {
+ 				failed = true;
+ 			}
+ 		}
+ 		if (failed) {
++			if (Module::IsNG() && !_strictLookup) {
++				return 0;  // DSD patch: load-time lookup of an ID that is never used, see IDDB::SetStrictLookup
++			}
+ 			const auto version = Module::get().version();
+ 			const auto str = std::format(
+ 				"Failed to find the id within the address library: {}\n"
+diff --git a/CommonLibF4/src/REL/Module.cpp b/CommonLibF4/src/REL/Module.cpp
+index dbd105e5..1688d6f9 100644
+--- a/CommonLibF4/src/REL/Module.cpp
++++ b/CommonLibF4/src/REL/Module.cpp
+@@ -52,7 +52,7 @@ namespace REL
+ 				_runtime = Runtime::VR;
+ 				break;
+ 			default:
+-				_runtime = (_version[2] > 163) ? Runtime::NG : Runtime::F4;
++				_runtime = (_version >= Version{ 1, 10, 980 }) ? Runtime::NG : Runtime::F4;
+ 			}
+ 			return;
+ 		}

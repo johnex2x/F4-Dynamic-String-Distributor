@@ -1,0 +1,13 @@
+diff --git a/CommonLibF4/include/RE/Scaleform/Kernel/SF_RefCount.h b/CommonLibF4/include/RE/Scaleform/Kernel/SF_RefCount.h
+index 51f8c4d1..f2ebfe24 100644
+--- a/CommonLibF4/include/RE/Scaleform/Kernel/SF_RefCount.h
++++ b/CommonLibF4/include/RE/Scaleform/Kernel/SF_RefCount.h
+@@ -34,7 +34,7 @@ namespace RE::Scaleform
+ 		void AddRef()
+ 		{
+ 			stl::atomic_ref myRefCount{ refCount };
+-			++refCount;
++			++myRefCount;
+ 		}
+ 
+ 		void Release()

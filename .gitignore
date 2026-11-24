@@ -1,0 +1,8 @@
+# Local translation data (not part of the source)
+/F4SE/
+# Build output
+/build/
+/out/
+/vcpkg_installed/
+.vs/
+*.user
