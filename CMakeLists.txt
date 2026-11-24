@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(DynamicStringDistributor VERSION 0.1.0 LANGUAGES CXX)
+project(DynamicStringDistributor VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -110,7 +110,7 @@ target_precompile_headers("${PROJECT_NAME}" PRIVATE include/PCH.h)
 target_compile_options("${PROJECT_NAME}" PRIVATE ${DSD_MSVC_OPTIONS})
 target_compile_definitions("${PROJECT_NAME}" PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
 target_link_options("${PROJECT_NAME}" PRIVATE
-	"$<$<CONFIG:Release>:/DEBUG:FULL;/OPT:REF;/OPT:ICF;/INCREMENTAL:NO>"
+	"$<$<CONFIG:Release>:/DEBUG:FULL;/OPT:REF;/OPT:ICF;/INCREMENTAL:NO;/PDBALTPATH:%_PDB%>"
 )
 
 target_link_libraries("${PROJECT_NAME}" PRIVATE

@@ -25,12 +25,14 @@ Output: `build/Release/DynamicStringDistributor.dll` and the optional `build/plu
 - Adds Fallout 4 hooks: dialogue options (vanilla wheel and XDI), crosshair prompts, character creation text, leveled-list and template names.
 - Runs on AE 1.11.x. CMake applies two small patches to CommonLibF4 (`cmake/patches/`): runtime detection, and an atomic Scaleform `AddRef`.
 - `MenuRefCountFix.dll` (`plugins/MenuRefCountFix/`) is a separate, optional F4SE plugin. CommonLibF4's Scaleform `RefCountImpl::AddRef` increments the plain count instead of the atomic one, and plugins built with it inline that code. In two known builds (Upscaling 1.1.1, Addictol) this race caused a crash or hang after leaving a workbench on AE. The DLL patches only those exact builds (24 bytes must match) and leaves any other version alone. DynamicStringDistributor.dll itself does not touch other plugins.
+- JSON `conditions` are read but not evaluated yet: an entry with conditions applies unconditionally. Fallout 4 additions: `rule` (INNR WNAM) and `choice` (PERK EPF2); INNR WNAM entries need `original`.
 - Developed with the help of AI coding assistants (Claude and Codex).
 
 ## Credits
 
 - SkyHorizon: original SSE Dynamic String Distributor. See its [mod page](https://www.nexusmods.com/skyrimspecialedition/mods/107676) for the original credits.
 - alandtse and contributors: CommonLibF4.
+- Agent69-stack: [FallHook](https://github.com/Agent69-stack/FallHook) (GPL-3.0). The OG 1.10.163 hooks for dialogue options, crosshair prompts, quest journal text and some text fields, and the prologue hook helper, are adapted from it.
 
 ## License
 

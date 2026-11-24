@@ -14,6 +14,6 @@ target_compile_features(MenuRefCountFix PRIVATE cxx_std_23)
 target_compile_options(MenuRefCountFix PRIVATE ${DSD_MSVC_OPTIONS})
 target_compile_definitions(MenuRefCountFix PRIVATE WIN32_LEAN_AND_MEAN NOMINMAX)
 target_link_options(MenuRefCountFix PRIVATE
-	"$<$<CONFIG:Release>:/DEBUG:FULL;/OPT:REF;/OPT:ICF;/INCREMENTAL:NO>"
+	"$<$<CONFIG:Release>:/DEBUG:FULL;/OPT:REF;/OPT:ICF;/INCREMENTAL:NO;/PDBALTPATH:%_PDB%>"
 )
 target_link_libraries(MenuRefCountFix PRIVATE CommonLibF4::CommonLibF4)
