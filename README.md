@@ -28,6 +28,32 @@ Output: `build/Release/DynamicStringDistributor.dll` and the optional `build/plu
 - JSON `conditions` are read but not evaluated yet: an entry with conditions applies unconditionally. Fallout 4 additions: `rule` (INNR WNAM) and `choice` (PERK EPF2); INNR WNAM entries need `original`.
 - Developed with the help of AI coding assistants (Claude and Codex).
 
+## INNR WNAM entries
+
+Instance naming rules (INNR) build names such as "Insulated Vault Suit" from parts. Each WNAM part is one entry:
+
+```json
+[
+  {
+    "form_id": "0023C063|Fallout4.esm",
+    "type": "INNR WNAM",
+    "original": "Insulated",
+    "string": "絕緣"
+  },
+  {
+    "form_id": "0023C063|Fallout4.esm",
+    "type": "INNR WNAM",
+    "original": "Treated",
+    "string": "加工"
+  }
+]
+```
+
+- `original` is required. It is the rule's text in the game; an entry without it is skipped.
+- Without `rule`, the entry matches every rule of that INNR whose text equals `original`. If no entry of that INNR matches, an entry with the same `original` from any INNR is used.
+- `rule` is optional and rarely needed. Use it only when one INNR has the same text on several rules and those rules need different translations. `rule` is the rule's number in that INNR: count every WNAM from 1, through all rule sets in file order, empty ones included. It is not the same number as `index`. If a mod update moves the rules and that number now holds another text, the entry is not used.
+- The text is read when the game loads, so the entry works whichever plugin's version of the INNR wins.
+
 ## Credits
 
 - SkyHorizon: original SSE Dynamic String Distributor. See its [mod page](https://www.nexusmods.com/skyrimspecialedition/mods/107676) for the original credits.
